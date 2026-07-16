@@ -11,7 +11,7 @@ from gpt2 import GPT, GPTConfig
 
 # Training parameters
 
-TRANING_STEPS = 3000                # Total steps to train
+TRANING_STEPS = 30                # Total steps to train
 
 OPT_LEARNING_RATE = 3e-4            # Optimizer learning rate
 OPT_BETAS = (0.9, 0.95)             # Optimizer betas
@@ -23,7 +23,9 @@ INPUT_PATH = "data/input.txt"       # Dataset path
 
 MAX_LEARNING_RATE = OPT_LEARNING_RATE           # Maximum learning rate for learning rate scheduler
 MIN_LEARNING_RATE = OPT_LEARNING_RATE * 0.1     # Minimum learning rate for learning rate scheduler
-WARMUP_STEPS = TRANING_STEPS * 0.015            # Warm-up steps for learning rate scheduler
+WARMUP_STEPS = TRANING_STEPS * 0.015            # Warm-up steps for learning rate 
+
+COMPILE_MODEL = False           # Model compilation (torch.compile) only works on Linux.
 
 # Use CUDA if available, otherwise fallback to
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -97,7 +99,10 @@ config = GPTConfig(
     n_embd=768
 )
 model = GPT(config)
-#model = torch.compile(model) # Only works on Linux with Triton
+
+if COMPILE_MODEL:
+    model = torch.compile(model) # Only works on Linux with Triton
+
 model = model.to(device)
 parameter_count = sum([p.numel() for p in model.parameters()])
 print(f"Model initialized with {'{:,}'.format(parameter_count)} parameters")
@@ -162,7 +167,10 @@ print(f"Trained for {TRANING_STEPS} steps in {dt:.2f} seconds.")
 
 ## Save the model state dict
 model_save_path = "model.pth"
-torch.save(model.state_dict(), model_save_path)
+if COMPILE_MODEL:
+    torch.save(model._orig_mod.state_dict(), model_save_path)
+else:
+    torch.save(model.state_dict(), model_save_path)
 print(f"Model parameters are saved to {model_save_path}")
 
 print()
