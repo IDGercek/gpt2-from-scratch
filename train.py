@@ -109,9 +109,20 @@ model = model.to(device)
 parameter_count = sum([p.numel() for p in model.parameters()])
 print(f"Model initialized with {'{:,}'.format(parameter_count)} parameters")
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=OPT_LEARNING_RATE, betas=OPT_BETAS, eps=OPT_EPSILON, weight_decay=OPT_WEIGHT_DECAY, fused=True)
 scaler = GradScaler(device=device)
 dataloader = DataLoader(BATCH_COUNT, config.block_size, INPUT_PATH, random_start=True)
+
+# Initialize optimizer with partial weight decay
+param_dict = {pn: p for pn, p in model.named_parameters() if p.requires_grad}
+decay_params = [p for n, p in param_dict.items() if p.dim() >= 2]       # Multi-dimensional tensors ge  t weight decay
+nodecay_params = [p for n, p in param_dict.items() if p.dim() < 2]      # No weight decay for 1D tensors (LayerNorm, Bias)
+
+optim_groups = [
+    {'params': decay_params, 'weight_decay': OPT_WEIGHT_DECAY},
+    {'params': nodecay_params, 'weight_decay': 0.0}
+]
+
+optimizer = torch.optim.AdamW(optim_groups, lr=OPT_LEARNING_RATE, betas=OPT_BETAS, eps=OPT_EPSILON, fused=True)
 
 ## Learning rate scheduler
 def get_lr(step):
