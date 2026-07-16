@@ -1,5 +1,6 @@
 import torch
 import torch.nn.functional as F
+from torch.amp.grad_scaler import GradScaler
 import tiktoken
 import matplotlib.pyplot as plt
 import math
@@ -11,7 +12,7 @@ from gpt2 import GPT, GPTConfig
 
 # Training parameters
 
-TRANING_STEPS = 30                # Total steps to train
+TRANING_STEPS = 250                # Total steps to train
 
 OPT_LEARNING_RATE = 3e-4            # Optimizer learning rate
 OPT_BETAS = (0.9, 0.95)             # Optimizer betas
@@ -108,6 +109,7 @@ parameter_count = sum([p.numel() for p in model.parameters()])
 print(f"Model initialized with {'{:,}'.format(parameter_count)} parameters")
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=OPT_LEARNING_RATE, betas=OPT_BETAS, eps=OPT_EPSILON, weight_decay=OPT_WEIGHT_DECAY, fused=True)
+scaler = GradScaler(device=device)
 dataloader = DataLoader(BATCH_COUNT, config.block_size, INPUT_PATH)
 
 ## Learning rate scheduler
@@ -142,17 +144,22 @@ for step in range(TRANING_STEPS):
 
     # Forward pass (with loss calculation)
     # Use autocast to use faster half-precision training with minimal impact on quality.
-    with torch.autocast(device_type=device):
+    with torch.autocast(device_type=device, dtype=torch.float16):
       logits, loss = model(x, y)
 
     # Backpropagation
     lr = get_lr(step)
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
+    scaler.scale(loss).backward()
 
-    loss.backward()
-    norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0) # Grad clipping to reduce effects of big losses
-    optimizer.step()
+    # Clip gradients
+    scaler.unscale_(optimizer) # Unscale before gradient clipping
+    norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0) # Grad clipping helps reduce effects of big losses
+
+    # Step optimizer with gradient scaling
+    scaler.step(optimizer)
+    scaler.update()
 
     losses.append(loss.item())
 
