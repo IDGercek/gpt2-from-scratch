@@ -9,7 +9,7 @@ A complete, ground-up implementation of OpenAI's GPT-2 (124M parameter) language
 ## Features
 
 - **GPT-2 Paper Implementation**: Implements the original GPT-2 model in PyTorch as described in the original paper.
-- **Modernized Training Loop**: Uses modern industry practices such as AdamW optimizer, learning rate decay and mixed precision to achieve faster training while also improving quality.
+- **Modernized Training Loop**: Uses modern industry practices such as AdamW optimizer, cosine learning rate decay and mixed precision to achieve faster training while also improving quality.
 - **Autoregressive Inference**: Utilizes Top-K sampling and temperature scaling for text generation.
 
 ## Repository Structure
@@ -39,7 +39,7 @@ pip install torch --index-url https://download.pytorch.org/whl/cu126
 
 ### Training the Model
 
-1. Use the default training file, or place your custom training data at `data/input.txt`.
+1. Use the default training data, or place your custom training data at `data/input.txt`.
 2. Run the training script:
 
 ```bash
@@ -80,6 +80,7 @@ Output: O Romeo, Romeo! wherefore art thou Romeo? Deny thy father and refuse thy
 - **Layers**: 12
 - **Attention Heads**: 12
 - **Embedding Dimension**: 768
+These are the default values used for 124M GPT-2, but all of them modifiable.
 
 ## Acknowledgements
 Special thanks to [Andrej Karpathy](https://karpathy.ai/) for his phenomenal educational content on Large Language Models, which heavily inspired the architecture and training methodologies used in this project.
