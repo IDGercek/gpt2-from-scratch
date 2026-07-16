@@ -80,6 +80,7 @@ Output: O Romeo, Romeo! wherefore art thou Romeo? Deny thy father and refuse thy
 - **Layers**: 12
 - **Attention Heads**: 12
 - **Embedding Dimension**: 768
+
 These are the default values used for 124M GPT-2, but all of them modifiable.
 
 ## Acknowledgements
