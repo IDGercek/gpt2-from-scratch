@@ -9,7 +9,7 @@ A complete, ground-up implementation of OpenAI's GPT-2 (124M parameter) language
 ## Features
 
 - **GPT-2 Paper Implementation**: Implements the original GPT-2 model in PyTorch as described in the original paper.
-- **Modernized Training Loop**: Uses modern industry practices such as AdamW optimizer, cosine learning rate decay and mixed precision to achieve faster training while also improving quality.
+- **Modernized Training Loop**: Uses modern industry practices such as AdamW optimizer, cosine learning rate decay, gradient accumulation and mixed precision to achieve faster training while also improving quality.
 - **Autoregressive Inference**: Utilizes Top-K sampling and temperature scaling for text generation.
 
 ## Repository Structure
