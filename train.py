@@ -12,10 +12,10 @@ from gpt2 import GPT, GPTConfig
 
 # Training parameters
 
-TRANING_STEPS = 10                   # Steps to train
+TRANING_STEPS = 500                   # Steps to train
 GRADIENT_ACCUMULATION_STEPS = 24    # Gradient accumulation steps (micro-steps). Total number of forward-backward passes is TRAINING_STEPS * GRADIENT_ACCUMULATION_STEPS.
 
-OPT_LEARNING_RATE = 9e-4            # Optimizer learning rate
+OPT_LEARNING_RATE = 6e-4            # Optimizer learning rate
 OPT_BETAS = (0.9, 0.95)             # Optimizer betas
 OPT_EPSILON = 1e-8                  # Optimizer epsilon
 OPT_WEIGHT_DECAY = 0.1              # Optimizer weight decay
@@ -184,7 +184,7 @@ for step in range(TRANING_STEPS):
 
     losses.append(loss_accum.item())
 
-    if step % (TRANING_STEPS // 10) == 0 or step == TRANING_STEPS - 1:
+    if step % (TRANING_STEPS // 50) == 0 or step == TRANING_STEPS - 1:
         dt = time.time() - t_prev
         t_prev = time.time()
         print(f"Step: {step} ({(step + 1) * GRADIENT_ACCUMULATION_STEPS}) | Loss: {loss_accum.item():.4f} | Lr: {lr:.4e} | Norm: {norm:.4f} | Time: {dt:.4f} sec | {(dataloader.B * dataloader.T * (step - step_prev) * GRADIENT_ACCUMULATION_STEPS / dt):.2f} tok/sec")
@@ -210,21 +210,21 @@ print(f"Final loss: {losses[len(losses) - 1]:.4f}")
 
 # Plotting losses
 print()
-plot_losses = input("Plot the loss graph? (Y/n): ")
-if plot_losses.lower() == "y":
-    # Plot the graph
-    plt.figure(figsize=(10, 6))
-    plt.plot(losses, label="Training Loss", color="blue", linewidth=1.5)
-    plt.title("GPT-2 Training Loss over Steps")
-    plt.xlabel("Training Step")
-    plt.ylabel("Loss")
-    plt.grid(True, linestyle="--", alpha=0.7)
-    plt.legend()
+print("-------- Plotting --------")
 
-    # Save the figure as a PNG file
-    plot_path = "loss_plot.png"
-    plt.tight_layout() # Ensures labels don't get cut off
-    plt.savefig(plot_path, dpi=300) # dpi=300 ensures high resolution
-    plt.close()
+# Plot the graph
+plt.figure(figsize=(10, 6))
+plt.plot(losses, label="Training Loss", color="blue", linewidth=1.5)
+plt.title("GPT-2 Training Loss over Steps")
+plt.xlabel("Training Step")
+plt.ylabel("Loss")
+plt.grid(True, linestyle="--", alpha=0.7)
+plt.legend()
 
-    print(f"Training loss graph saved to {plot_path}")
+# Save the figure as a PNG file
+plot_path = "loss_plot.png"
+plt.tight_layout() # Ensures labels don't get cut off
+plt.savefig(plot_path, dpi=300) # dpi=300 ensures high resolution
+plt.close()
+
+print(f"Training loss graph saved to {plot_path}")
