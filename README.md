@@ -79,5 +79,7 @@ These are the default values used for 124M GPT-2, but all of them modifiable.
 - Trained for `500` steps, which equals to `12,000` iterations over the dataset.
 - Training took ~1 hour on an Nvidia RTX 5080 Mobile GPU with 16 GB VRAM and CUDA enabled.
 
+![Loss Plot](data/loss_plot.png)
+
 ## Acknowledgements
 Special thanks to [Andrej Karpathy](https://karpathy.ai/) for his phenomenal educational content on Large Language Models, which heavily inspired the architecture and training methodologies used in this project.
