@@ -27,7 +27,7 @@ MAX_LEARNING_RATE = OPT_LEARNING_RATE           # Maximum learning rate for lear
 MIN_LEARNING_RATE = OPT_LEARNING_RATE * 0.1     # Minimum learning rate for learning rate scheduler
 WARMUP_STEPS = TRANING_STEPS * 0.015            # Warm-up steps for learning rate 
 
-COMPILE_MODEL = True           # Model compilation (torch.compile) only works on Linux.
+COMPILE_MODEL = False           # Model compilation (torch.compile) only works on Linux.
 
 # Use CUDA if available, otherwise fallback to
 device = "cuda" if torch.cuda.is_available() else "cpu"
