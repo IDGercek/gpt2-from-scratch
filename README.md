@@ -57,10 +57,10 @@ python run.py
 ```
 
 ## Tech Stack
-- Language: Python
-- Libraries: PyTorch, Tiktoken
-- Paper: [Language Models are Unsupervised Multitask Learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)
-- Dataset: [Tiny Shakespeare](https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt) by Andrej Karpathy
+- **Language:** Python
+- **Libraries:** PyTorch, Tiktoken
+- **Paper:** [Language Models are Unsupervised Multitask Learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)
+- **Dataset:** [Tiny Shakespeare](https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt) by Andrej Karpathy
 
 ## Technical Details
 
