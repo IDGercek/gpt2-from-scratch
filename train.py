@@ -222,7 +222,7 @@ plt.grid(True, linestyle="--", alpha=0.7)
 plt.legend()
 
 # Save the figure as a PNG file
-plot_path = "loss_plot.png"
+plot_path = "data/loss_plot.png"
 plt.tight_layout() # Ensures labels don't get cut off
 plt.savefig(plot_path, dpi=300) # dpi=300 ensures high resolution
 plt.close()
