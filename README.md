@@ -56,16 +56,6 @@ Once the model is trained and `model.pth` is generated, you can run inference on
 python run.py
 ```
 
-*Example usage:*
-```text
--------- Generation --------
-Please write the prompt for generation, or 'q' to quit the program.
-Input: O Romeo, Romeo! wherefore art thou Romeo?
-
-Generating output...
-Output: O Romeo, Romeo! wherefore art thou Romeo? Deny thy father and refuse thy name...
-```
-
 ## Tech Stack
 - Language: Python
 - Libraries: PyTorch, Tiktoken
